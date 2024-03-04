@@ -10,7 +10,6 @@ export default function Login() {
   });
   const [isLogin, setIsLogin] = useState(false);
 
-  console.log(auth.currentUser);
   const handleInformation = (e: any) => {
     const { name, value } = e.target;
     setInformation({ ...information, [name]: value });
