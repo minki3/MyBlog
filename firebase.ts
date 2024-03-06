@@ -9,15 +9,25 @@ import { getDatabase } from "firebase/database";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+
+const API_KEY = process.env.NEXT_PUBLIC_REACT_APP_APIKEY;
+const AUTH_DOMAIN = process.env.NEXT_PUBLIC_REACT_AUTH_DOMAIN;
+const PROJECT_ID = process.env.NEXT_PUBLIC_REACT_PROJECT_ID;
+const STORAGE_BUCKET = process.env.NEXT_PUBLIC_REACT_STORAGE_BUCKET;
+const MESSAGING_SENDER_ID = process.env.NEXT_PUBLIC_REACT_MESSAGING_SENDER_ID;
+const APP_ID = process.env.NEXT_PUBLIC_REACT_APP_ID;
+const MEASUREMENT_ID = process.env.NEXT_PUBLIC_REACT_MEASUREMENT_ID;
+const DATABASE_URL = process.env.NEXT_PUBLIC_REACT_DATABASE_URL;
+
 const firebaseConfig = {
-  apiKey: "AIzaSyAATy9oG8WendYn8PjHfmMTnESpN_mKBxk",
-  authDomain: "myblog-40637.firebaseapp.com",
-  projectId: "myblog-40637",
-  storageBucket: "myblog-40637.appspot.com",
-  messagingSenderId: "717421681141",
-  appId: "1:717421681141:web:6435b75aaad1ede20ee8bc",
-  measurementId: "G-RSPR8W5WKJ",
-  databaseURL: "https://myblog-40637-default-rtdb.firebaseio.com",
+  apiKey: API_KEY,
+  authDomain: AUTH_DOMAIN,
+  projectId: PROJECT_ID,
+  storageBucket: STORAGE_BUCKET,
+  messagingSenderId: MESSAGING_SENDER_ID,
+  appId: APP_ID,
+  measurementId: MEASUREMENT_ID,
+  databaseURL: DATABASE_URL,
 };
 
 // Initialize Firebase
