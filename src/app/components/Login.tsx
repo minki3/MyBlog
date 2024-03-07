@@ -1,12 +1,12 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import { signInWithEmailAndPassword, signOut } from "firebase/auth";
-import { auth } from "../../../firebase";
+'use client';
+import React, { useEffect, useState } from 'react';
+import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { auth } from '../../../firebase';
 
 export default function Login() {
   const [information, setInformation] = useState({
-    email: "",
-    password: "",
+    email: '',
+    password: '',
   });
   const [isLogin, setIsLogin] = useState(false);
 
@@ -18,18 +18,18 @@ export default function Login() {
   const login = () => {
     signInWithEmailAndPassword(auth, information.email, information.password)
       .then((result) => {
-        console.log(result, " login!!!!");
-        setInformation({ email: "", password: "" });
+        console.log(result, ' login!!!!');
+        setInformation({ email: '', password: '' });
       })
       .catch((err) => {
         console.log(err);
-        alert("아이디와 비밀번호를 확인해주세요.");
+        alert('아이디와 비밀번호를 확인해주세요.');
       });
   };
 
   const logout = () => {
     signOut(auth).then((result) => {
-      console.log("로그아웃", result);
+      console.log('로그아웃', result);
     });
   };
 

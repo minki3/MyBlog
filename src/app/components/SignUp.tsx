@@ -1,14 +1,14 @@
-"use client";
-import React, { useState } from "react";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { auth } from "../../../firebase";
-import { app } from "../../../firebase";
+'use client';
+import React, { useState } from 'react';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { auth } from '../../../firebase';
+import { app } from '../../../firebase';
 
 const Login = () => {
   const [information, setInformation] = useState({
-    email: "",
-    password: "",
-    nickname: "",
+    email: '',
+    password: '',
+    nickname: '',
   });
   console.log(app);
 
@@ -16,11 +16,11 @@ const Login = () => {
     createUserWithEmailAndPassword(
       auth,
       information.email,
-      information.password
+      information.password,
     )
       .then((result) => {
         updateProfile(result.user, { displayName: information.nickname });
-        console.log(result, "Sign Up!!!");
+        console.log(result, 'Sign Up!!!');
       })
       .catch((err) => console.log(err));
   };
