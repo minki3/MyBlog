@@ -2,8 +2,15 @@ import React, { useState } from "react";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { db } from "../../../firebase";
-import { CustomUploadAdapter } from "@/app/utils/UploaImage";
+// import { CustomUploadAdapter } from "@/app/utils/UploaImage";
 import { ref, set } from "firebase/database";
+
+import {
+  ref as storageRef,
+  uploadBytes,
+  getDownloadURL,
+} from "firebase/storage";
+import { storage } from "../../../firebase";
 
 const editorConfiguration = {
   toolbar: [
@@ -33,11 +40,44 @@ function CustomEditor() {
     subTitle: "",
   });
   const [content, setContent] = useState<string>();
+  const [images, setImages] = useState<any>();
 
   const handleInput = (e: any) => {
     const { name, value } = e.target;
     setHeaders({ ...headers, [name]: value });
   };
+  console.log("1", content);
+
+  class CustomUploadAdapter {
+    loader: any;
+    constructor(loader: any) {
+      this.loader = loader;
+    }
+
+    upload() {
+      return new Promise((resolve, reject) => {
+        this.loader.file.then(async (file: any) => {
+          const imageStorageRef = storageRef(
+            storage,
+            `images/posts/${file.name}`
+          );
+          await uploadBytes(imageStorageRef, file)
+            .then(() => {
+              console.log("Upload successful");
+              getDownloadURL(imageStorageRef)
+                .then((url) => {
+                  console.log(url);
+                  resolve({ default: url });
+                })
+                .catch((error) => reject(error));
+            })
+            .catch((error) => {
+              reject(error);
+            });
+        });
+      });
+    }
+  }
 
   function uploadPlugin(editor: any) {
     editor.plugins.get("FileRepository").createUploadAdapter = (
