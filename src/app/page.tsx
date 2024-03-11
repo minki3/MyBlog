@@ -8,6 +8,8 @@ export default function Home() {
   return (
     <>
       <Introduce />
+
+      <Posts />
     </>
   );
 }
