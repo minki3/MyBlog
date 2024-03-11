@@ -22,8 +22,10 @@ export class CustomUploadAdapter {
           .then(() => {
             console.log("Upload successful");
             getDownloadURL(imageStorageRef)
-              .then((url) => console.log(url))
-              .then((url) => resolve({ default: url }))
+              .then((url) => {
+                console.log(url);
+                resolve({ default: url });
+              })
               .catch((error) => reject(error));
           })
           .catch((error) => {
@@ -32,4 +34,10 @@ export class CustomUploadAdapter {
       });
     });
   }
+}
+
+export function uploadPlugin(editor: any) {
+  editor.plugins.get("FileRepository").createUploadAdapter = (loader: any) => {
+    return new CustomUploadAdapter(loader);
+  };
 }

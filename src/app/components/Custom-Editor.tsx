@@ -1,36 +1,14 @@
-import React, { useState } from "react";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { db } from "../../../firebase";
-import { CustomUploadAdapter } from "@/app/utils/UploaImage";
-import { ref, set } from "firebase/database";
-
-const editorConfiguration = {
-  toolbar: [
-    "heading",
-    "|",
-    "bold",
-    "italic",
-    "link",
-    "bulletedList",
-    "numberedList",
-    "|",
-    "outdent",
-    "indent",
-    "|",
-    "imageUpload",
-    "blockQuote",
-    "insertTable",
-    "mediaEmbed",
-    "undo",
-    "redo",
-  ],
-};
+import React, { useState } from 'react';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { db } from '../../../firebase';
+import { uploadPlugin } from '@/app/utils/UploaImage';
+import { ref, set } from 'firebase/database';
 
 function CustomEditor() {
   const [headers, setHeaders] = useState({
-    title: "",
-    subTitle: "",
+    title: '',
+    subTitle: '',
   });
   const [content, setContent] = useState<string>();
 
@@ -38,14 +16,7 @@ function CustomEditor() {
     const { name, value } = e.target;
     setHeaders({ ...headers, [name]: value });
   };
-
-  function uploadPlugin(editor: any) {
-    editor.plugins.get("FileRepository").createUploadAdapter = (
-      loader: any
-    ) => {
-      return new CustomUploadAdapter(loader);
-    };
-  }
+  console.log('1', content);
 
   const uploadHandler = () => {
     set(ref(db, `posts/${headers.title}`), {
@@ -53,7 +24,7 @@ function CustomEditor() {
       subTitle: headers.subTitle,
       contents: content,
     })
-      .then((res) => console.log("성공"))
+      .then((res) => console.log('성공'))
       .catch((e) => console.log(e));
   };
 
@@ -78,23 +49,23 @@ function CustomEditor() {
         config={{
           extraPlugins: [uploadPlugin],
           toolbar: [
-            "heading",
-            "|",
-            "bold",
-            "italic",
-            "link",
-            "bulletedList",
-            "numberedList",
-            "|",
-            "outdent",
-            "indent",
-            "|",
-            "imageUpload",
-            "blockQuote",
-            "insertTable",
-            "mediaEmbed",
-            "undo",
-            "redo",
+            'heading',
+            '|',
+            'bold',
+            'italic',
+            'link',
+            'bulletedList',
+            'numberedList',
+            '|',
+            'outdent',
+            'indent',
+            '|',
+            'imageUpload',
+            'blockQuote',
+            'insertTable',
+            'mediaEmbed',
+            'undo',
+            'redo',
           ],
         }}
         data={content}

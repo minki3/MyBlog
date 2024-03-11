@@ -11,13 +11,14 @@ import { getDatabase } from "firebase/database";
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 
 const API_KEY = process.env.NEXT_PUBLIC_REACT_APP_APIKEY;
-const AUTH_DOMAIN = process.env.NEXT_PUBLIC_REACT_AUTH_DOMAIN;
-const PROJECT_ID = process.env.NEXT_PUBLIC_REACT_PROJECT_ID;
-const STORAGE_BUCKET = process.env.NEXT_PUBLIC_REACT_STORAGE_BUCKET;
-const MESSAGING_SENDER_ID = process.env.NEXT_PUBLIC_REACT_MESSAGING_SENDER_ID;
-const APP_ID = process.env.NEXT_PUBLIC_REACT_APP_ID;
-const MEASUREMENT_ID = process.env.NEXT_PUBLIC_REACT_MEASUREMENT_ID;
-const DATABASE_URL = process.env.NEXT_PUBLIC_REACT_DATABASE_URL;
+const AUTH_DOMAIN = process.env.NEXT_PUBLIC_REACT_APP_AUTH_DOMAIN;
+const PROJECT_ID = process.env.NEXT_PUBLIC_REACT_APP_PROJECT_ID;
+const STORAGE_BUCKET = process.env.NEXT_PUBLIC_REACT_APP_STORAGE_BUCKET;
+const MESSAGING_SENDER_ID =
+  process.env.NEXT_PUBLIC_REACT_APP_MESSAGING_SENDER_ID;
+const APP_ID = process.env.NEXT_PUBLIC_REACT_APP_APP_ID;
+const MEASUREMENT_ID = process.env.NEXT_PUBLIC_REACT_APP_MEASUREMENT_ID;
+const DATABASE_URL = process.env.NEXT_PUBLIC_REACT_APP_DATABASE_URL;
 
 const firebaseConfig = {
   apiKey: API_KEY,
@@ -32,7 +33,6 @@ const firebaseConfig = {
 
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
-// const analytics = getAnalytics(app);
 export const auth = getAuth(app);
 export const db = getDatabase(app);
 export const storage = getStorage(app);
