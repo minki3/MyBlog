@@ -24,8 +24,12 @@ function CustomEditor() {
       subTitle: headers.subTitle,
       contents: content,
     })
-      .then((res) => console.log('성공'))
-      .catch((e) => console.log(e));
+      .then((res) => {
+        console.log('성공');
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   };
 
   return (

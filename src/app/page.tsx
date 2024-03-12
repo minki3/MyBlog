@@ -5,11 +5,5 @@ import WriteContents from '@/app/components/WriteContents';
 import Introduce from '@/app/components/introduce/Introduce';
 
 export default function Home() {
-  return (
-    <>
-      <Introduce />
-
-      <Posts />
-    </>
-  );
+  return <>fdsafsfa</>;
 }

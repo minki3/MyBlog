@@ -1,8 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-import { auth } from '../../../firebase';
-import { app } from '../../../firebase';
+import { auth, app } from '../../../firebase';
 
 const Login = () => {
   const [information, setInformation] = useState({
@@ -22,7 +21,9 @@ const Login = () => {
         updateProfile(result.user, { displayName: information.nickname });
         console.log(result, 'Sign Up!!!');
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const handleInformation = (e: any) => {
