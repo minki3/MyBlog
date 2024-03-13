@@ -1,5 +1,17 @@
+import ShowPosts from '@/app/components/ShowPosts';
 import React from 'react';
 
-export default function Development() {
-  return <div>test</div>;
+interface Props {
+  searchParams: { name: string; pathname: string };
+}
+
+export default function Development({ searchParams }: Props) {
+  return (
+    <div>
+      <ShowPosts
+        postTitle={searchParams.name}
+        pathname={searchParams.pathname}
+      />
+    </div>
+  );
 }

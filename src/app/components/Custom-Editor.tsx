@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import { db } from '../../../firebase';
+import { cloudDb } from '../../../firebase';
 import { uploadPlugin } from '@/app/utils/UploaImage';
 import { ref, set } from 'firebase/database';
+import { addDoc, collection, setDoc, doc } from 'firebase/firestore';
 
 function CustomEditor() {
   const [headers, setHeaders] = useState({
@@ -19,10 +20,11 @@ function CustomEditor() {
   console.log('1', content);
 
   const uploadHandler = () => {
-    set(ref(db, `posts/${headers.title}`), {
+    setDoc(doc(cloudDb, `posts`, `${headers.title}`), {
       title: headers.title,
       subTitle: headers.subTitle,
       contents: content,
+      category: 'develop',
     })
       .then((res) => {
         console.log('성공');
