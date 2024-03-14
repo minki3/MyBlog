@@ -60,7 +60,6 @@ export default function Category() {
                     key={sidx}
                     href={{
                       pathname: `/${category}/${pathname}`,
-                      query: { name: `${name}`, pathname: `${pathname}` },
                     }}
                     // as={`/${category}/${pathname}`}
                     className="flex flex-col items-center"

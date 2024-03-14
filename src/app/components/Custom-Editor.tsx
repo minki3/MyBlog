@@ -3,8 +3,12 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { cloudDb } from '../../../firebase';
 import { uploadPlugin } from '@/app/utils/UploaImage';
-import { ref, set } from 'firebase/database';
-import { addDoc, collection, setDoc, doc } from 'firebase/firestore';
+import { addDoc, collection } from 'firebase/firestore';
+
+export const Category = [
+  { category: '개발', name: 'development' },
+  { caetgory: '취미', name: 'hobby' },
+];
 
 function CustomEditor() {
   const [headers, setHeaders] = useState({
@@ -17,14 +21,13 @@ function CustomEditor() {
     const { name, value } = e.target;
     setHeaders({ ...headers, [name]: value });
   };
-  console.log('1', content);
 
   const uploadHandler = () => {
-    setDoc(doc(cloudDb, `posts`, `${headers.title}`), {
+    addDoc(collection(cloudDb, `posts`), {
       title: headers.title,
       subTitle: headers.subTitle,
       contents: content,
-      category: 'develop',
+      category: 'hobby',
     })
       .then((res) => {
         console.log('성공');
@@ -50,6 +53,9 @@ function CustomEditor() {
         value={headers.subTitle}
         onChange={handleInput}
       />
+      <select>
+        <option></option>
+      </select>
       <CKEditor
         editor={ClassicEditor}
         config={{
