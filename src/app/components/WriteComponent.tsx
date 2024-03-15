@@ -1,18 +1,12 @@
-'use client';
 import React from 'react';
 import dynamic from 'next/dynamic';
-import CustomEditor from '@/app/components/Custom-Editor';
 
-export default function WriteContents() {
+export default function WrtieComponent() {
   const Editor = dynamic(
     async () => await import('@/app/components/Custom-Editor'),
     {
       ssr: false,
     },
   );
-  return (
-    <>
-      <Editor />
-    </>
-  );
+  return <Editor />;
 }

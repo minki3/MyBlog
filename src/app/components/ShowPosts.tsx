@@ -67,6 +67,7 @@ import React from 'react';
 import Link from 'next/link';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { cloudDb } from '../../../firebase';
+import WriteButton from '@/app/components/WriteButton';
 interface Props {
   postTitle: string;
   pathName: string;
@@ -99,22 +100,28 @@ export default async function ShowPosts({ postTitle, pathName }: Props) {
   }
 
   return (
-    <div>
+    <div className="flex flex-col">
       <span className=" font-bold text-2xl">{postTitle}</span>
-
-      <ul className="pl-4">
-        {data &&
-          data.map((item: any, idx: number) => {
-            return (
-              <Link href={`/blog/${item.name}`} key={idx}>
-                <li className="m-4 border-b pb-4">
-                  <span className="pr-4">{idx + 1}</span>
-                  <span>{item.data.title}</span>
-                </li>
-              </Link>
-            );
-          })}
-      </ul>
+      <div className="flex flex-col h-[80vh]">
+        <div className="basis-[80%]">
+          <ul className="pl-4">
+            {data &&
+              data.map((item: any, idx: number) => {
+                return (
+                  <Link href={`/blog/${item.name}`} key={idx}>
+                    <li className="m-4 border-b pb-4">
+                      <span className="pr-4">{idx + 1}</span>
+                      <span>{item.data.title}</span>
+                    </li>
+                  </Link>
+                );
+              })}
+          </ul>
+        </div>
+        <div className=" justify-end text-end">
+          <WriteButton />
+        </div>
+      </div>
     </div>
   );
 }

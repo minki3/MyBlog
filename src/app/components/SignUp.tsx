@@ -26,6 +26,7 @@ const Login = () => {
       setDoc(doc(cloudDb, 'users', `${result.user.uid}`), {
         email: result.user.email,
         displayName: result.user.displayName,
+        uid: result.user.uid,
       });
 
       console.log('db 저장 성공');

@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { cloudDb } from '../../../firebase';
 import { uploadPlugin } from '@/app/utils/UploaImage';
 import { addDoc, collection } from 'firebase/firestore';
+import { auth } from '../../../firebase';
 
 export const CATEGORY = [
   { category: '카테고리 선택', name: '' },
@@ -12,6 +13,7 @@ export const CATEGORY = [
 ];
 
 function CustomEditor() {
+  const [userInformation, setUserInformation] = useState<any>();
   const [headers, setHeaders] = useState({
     title: '',
     subTitle: '',
@@ -35,6 +37,7 @@ function CustomEditor() {
       subTitle: headers.subTitle,
       contents: content,
       category: headers.category,
+      auth: userInformation.displayName,
     })
       .then((res) => {
         console.log('성공');
@@ -43,6 +46,16 @@ function CustomEditor() {
         console.log(e);
       });
   };
+
+  useEffect(() => {
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        setUserInformation(user);
+      }
+    });
+  }, []);
+
+  console.log(userInformation);
 
   return (
     <>
