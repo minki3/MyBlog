@@ -28,15 +28,23 @@ export default function Login() {
   };
 
   const logout = () => {
-    signOut(auth).then((result) => {
-      console.log('로그아웃', result);
-    });
+    signOut(auth)
+      .then((result) => {
+        console.log('로그아웃', result);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   };
 
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
-      if (user) setIsLogin(true);
-      else setIsLogin(false);
+      if (user != null) {
+        setIsLogin(true);
+        console.log(user.uid);
+      } else {
+        setIsLogin(false);
+      }
     });
   }, []);
 
@@ -67,7 +75,7 @@ export default function Login() {
       )}
       {isLogin && (
         <div>
-          {auth.currentUser && auth.currentUser.displayName}
+          {auth.currentUser?.displayName}
           <span onClick={logout}>로그아웃</span>
         </div>
       )}
