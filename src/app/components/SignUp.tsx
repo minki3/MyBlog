@@ -2,6 +2,8 @@
 import React, { useState } from 'react';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth, app } from '../../../firebase';
+import { doc, setDoc } from 'firebase/firestore';
+import { cloudDb } from '../../../firebase';
 
 const Login = () => {
   const [information, setInformation] = useState({
@@ -9,21 +11,27 @@ const Login = () => {
     password: '',
     nickname: '',
   });
-  console.log(app);
 
-  const singUp = () => {
-    createUserWithEmailAndPassword(
-      auth,
-      information.email,
-      information.password,
-    )
-      .then((result) => {
-        updateProfile(result.user, { displayName: information.nickname });
-        console.log(result, 'Sign Up!!!');
-      })
-      .catch((err) => {
-        console.log(err);
+  const singUp = async () => {
+    try {
+      const result = await createUserWithEmailAndPassword(
+        auth,
+        information.email,
+        information.password,
+      );
+
+      await updateProfile(result.user, { displayName: information.nickname });
+      console.log('1111', result.user);
+
+      setDoc(doc(cloudDb, 'users', `${result.user.uid}`), {
+        email: result.user.email,
+        displayName: result.user.displayName,
       });
+
+      console.log('db 저장 성공');
+    } catch (error) {
+      console.error('회원가입 실패:', error);
+    }
   };
 
   const handleInformation = (e: any) => {

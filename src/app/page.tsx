@@ -7,6 +7,8 @@ import Introduce from '@/app/components/introduce/Introduce';
 export default function Home() {
   return (
     <>
+      <SignUp />
+      <Login />
       <WriteContents />
     </>
   );

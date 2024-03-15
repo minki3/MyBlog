@@ -1,6 +1,6 @@
 import React from 'react';
 import { collection, query, where, getDocs } from 'firebase/firestore';
-import { cloudDb } from '../../../../firebase';
+import { cloudDb, auth } from '../../../../firebase';
 import parse from 'html-react-parser';
 
 interface Props {
@@ -9,8 +9,6 @@ interface Props {
   };
 }
 export default async function PostSlugPage({ params }: Props) {
-  console.log(params.post);
-
   const q = query(collection(cloudDb, `posts/`));
   let data: any;
   const querySnapshot = await getDocs(q);
@@ -20,7 +18,7 @@ export default async function PostSlugPage({ params }: Props) {
   });
 
   if (data === undefined) return <div>페이지를 찾을 수 없음</div>;
-  console.log(data.data.content);
+
   return (
     <div className="flex flex-col p-4">
       <span className="font-blod text-2xl pb-4 border-b-2 mb-8 pl-2 border-black">

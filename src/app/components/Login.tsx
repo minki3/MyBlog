@@ -39,8 +39,12 @@ export default function Login() {
 
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
-      if (user != null) setIsLogin(true);
-      else setIsLogin(false);
+      if (user != null) {
+        setIsLogin(true);
+        console.log(user.uid);
+      } else {
+        setIsLogin(false);
+      }
     });
   }, []);
 

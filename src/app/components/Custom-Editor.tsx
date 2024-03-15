@@ -5,15 +5,17 @@ import { cloudDb } from '../../../firebase';
 import { uploadPlugin } from '@/app/utils/UploaImage';
 import { addDoc, collection } from 'firebase/firestore';
 
-export const Category = [
+export const CATEGORY = [
+  { category: '카테고리 선택', name: '' },
   { category: '개발', name: 'development' },
-  { caetgory: '취미', name: 'hobby' },
+  { category: '취미', name: 'hobby' },
 ];
 
 function CustomEditor() {
   const [headers, setHeaders] = useState({
     title: '',
     subTitle: '',
+    category: '',
   });
   const [content, setContent] = useState<string>();
 
@@ -22,12 +24,17 @@ function CustomEditor() {
     setHeaders({ ...headers, [name]: value });
   };
 
+  const handleCategory = (e: any) => {
+    setHeaders({ ...headers, category: e });
+  };
+
   const uploadHandler = () => {
+    if (headers.category === '') return alert('카테고리를 선택해주세요.');
     addDoc(collection(cloudDb, `posts`), {
       title: headers.title,
       subTitle: headers.subTitle,
       contents: content,
-      category: 'hobby',
+      category: headers.category,
     })
       .then((res) => {
         console.log('성공');
@@ -53,8 +60,20 @@ function CustomEditor() {
         value={headers.subTitle}
         onChange={handleInput}
       />
-      <select>
-        <option></option>
+      <select
+        onChange={(e) => {
+          handleCategory(e.target.value);
+        }}
+      >
+        {CATEGORY.map(
+          (item: { category: string; name: string }, idx: number) => {
+            return (
+              <option key={idx} value={item.name}>
+                {item.category}
+              </option>
+            );
+          },
+        )}
       </select>
       <CKEditor
         editor={ClassicEditor}
