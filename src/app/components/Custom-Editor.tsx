@@ -5,6 +5,8 @@ import { cloudDb } from '../../../firebase';
 import { uploadPlugin } from '@/app/utils/UploaImage';
 import { addDoc, collection } from 'firebase/firestore';
 import { auth } from '../../../firebase';
+import { redirect } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 export const CATEGORY = [
   { category: '카테고리 선택', name: '' },
@@ -20,6 +22,7 @@ function CustomEditor() {
     category: '',
   });
   const [content, setContent] = useState<string>();
+  const router = useRouter();
 
   const handleInput = (e: any) => {
     const { name, value } = e.target;
@@ -38,6 +41,7 @@ function CustomEditor() {
       contents: content,
       category: headers.category,
       auth: userInformation.displayName,
+      uid: userInformation.uid,
     })
       .then((res) => {
         console.log('성공');
@@ -51,11 +55,12 @@ function CustomEditor() {
     auth.onAuthStateChanged((user) => {
       if (user) {
         setUserInformation(user);
+      } else {
+        alert('로그인 후 이용');
+        router.push('/');
       }
     });
   }, []);
-
-  console.log(userInformation);
 
   return (
     <>
