@@ -2,6 +2,7 @@ import React from 'react';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { cloudDb, auth } from '../../../../firebase';
 import parse from 'html-react-parser';
+import UpdateButton from '@/app/components/UpdateButton';
 
 interface Props {
   params: {
@@ -18,9 +19,10 @@ export default async function PostSlugPage({ params }: Props) {
   });
 
   if (data === undefined) return <div>페이지를 찾을 수 없음</div>;
-
+  console.log(data.name);
   return (
     <div className="flex flex-col p-4">
+      <UpdateButton uid={data.data.uid} post={data.name} />
       <span className="font-blod text-2xl pb-4 border-b-2 mb-8 pl-2 border-black">
         {data.data.title}
       </span>

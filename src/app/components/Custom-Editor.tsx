@@ -3,10 +3,17 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { cloudDb } from '../../../firebase';
 import { uploadPlugin } from '@/app/utils/UploaImage';
-import { addDoc, collection } from 'firebase/firestore';
+import {
+  addDoc,
+  collection,
+  serverTimestamp,
+  getDoc,
+  doc,
+  updateDoc,
+} from 'firebase/firestore';
 import { auth } from '../../../firebase';
-import { redirect } from 'next/navigation';
 import { useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 
 export const CATEGORY = [
   { category: '카테고리 선택', name: '' },
@@ -15,6 +22,10 @@ export const CATEGORY = [
 ];
 
 function CustomEditor() {
+  const params = useSearchParams();
+
+  const post = params.get('post');
+
   const [userInformation, setUserInformation] = useState<any>();
   const [headers, setHeaders] = useState({
     title: '',
@@ -33,22 +44,40 @@ function CustomEditor() {
     setHeaders({ ...headers, category: e });
   };
 
-  const uploadHandler = () => {
+  const uploadHandler = async () => {
     if (headers.category === '') return alert('카테고리를 선택해주세요.');
-    addDoc(collection(cloudDb, `posts`), {
-      title: headers.title,
-      subTitle: headers.subTitle,
-      contents: content,
-      category: headers.category,
-      auth: userInformation.displayName,
-      uid: userInformation.uid,
-    })
-      .then((res) => {
-        console.log('성공');
+
+    if (post) {
+      const updatePost = doc(cloudDb, 'posts', `${post}`);
+      await updateDoc(updatePost, {
+        title: headers.title,
+        subTitle: headers.subTitle,
+        contents: content,
+        category: headers.category,
       })
-      .catch((e) => {
-        console.log(e);
-      });
+        .then((res) => {
+          console.log('성공');
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    } else {
+      addDoc(collection(cloudDb, `posts`), {
+        title: headers.title,
+        subTitle: headers.subTitle,
+        contents: content,
+        category: headers.category,
+        auth: userInformation.displayName,
+        uid: userInformation.uid,
+        timestamp: serverTimestamp(),
+      })
+        .then((res) => {
+          console.log('성공');
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    }
   };
 
   useEffect(() => {
@@ -61,6 +90,29 @@ function CustomEditor() {
       }
     });
   }, []);
+
+  //문서 수정 코드
+  useEffect(() => {
+    const getData = async () => {
+      const q = doc(cloudDb, 'posts/', `${post}`);
+      const query = await getDoc(q);
+      console.log(post);
+      console.log(query.id);
+      if (query.exists()) {
+        console.log('Document data:', query.data());
+        console.log(query.id);
+        setHeaders({
+          title: query.data().title,
+          subTitle: query.data().subTitle,
+          category: query.data().category,
+        });
+        setContent(query.data().contents);
+      } else {
+        if (post !== null) router.push('/');
+      }
+    };
+    getData();
+  }, [post]);
 
   return (
     <>
@@ -79,6 +131,7 @@ function CustomEditor() {
         onChange={handleInput}
       />
       <select
+        value={headers.category}
         onChange={(e) => {
           handleCategory(e.target.value);
         }}
