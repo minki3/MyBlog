@@ -1,8 +1,10 @@
 // 'use client';
-// import React, { useEffect, useState } from 'react';
+// import React, { Suspense, useEffect, useState } from 'react';
 // import Link from 'next/link';
 // import { collection, getDocs, query, where } from 'firebase/firestore';
 // import { cloudDb } from '../../../firebase';
+// import WriteButton from '@/app/components/WriteButton';
+
 // interface Props {
 //   postTitle: string;
 //   pathName: string;
@@ -39,28 +41,33 @@
 //     getData();
 //   }, []);
 
-//   console.log(data);
 //   return (
 //     <div>
 //       <span className=" font-bold text-2xl">{postTitle}</span>
 
 //       <ul className="pl-4">
 //         {data &&
-//           data.map((item: any, idx: number) => {
-//             return (
-//               <Link href={`/blog/${item.name}`} key={idx}>
-//                 <li className="m-4 border-b pb-4">
-//                   <span className="pr-4">{idx + 1}</span>
-//                   <span>{item.data.title}</span>
-//                 </li>
-//               </Link>
-//             );
-//           })}
+//           data
+//             .sort(
+//               (a: any, b: any) =>
+//                 b.data.timestamp.seconds - a.data.timestamp.seconds,
+//             )
+//             .map((item: any, idx: number) => {
+//               return (
+//                 <Link href={`/blog/${item.name}`} key={idx}>
+//                   <li className="m-4 border-b pb-4">
+//                     <span className="pr-4">{idx + 1}</span>
+//                     <span>{item.data.title}</span>
+//                   </li>
+//                 </Link>
+//               );
+//             })}
 //       </ul>
+//       <WriteButton />
 //     </div>
 //   );
 // }
-// csr
+// csr;
 
 //ssr
 import React from 'react';
@@ -68,6 +75,8 @@ import Link from 'next/link';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { cloudDb } from '../../../firebase';
 import WriteButton from '@/app/components/WriteButton';
+import moment from 'moment';
+import { dateFormat } from '@/app/utils/dateFormat';
 interface Props {
   postTitle: string;
   pathName: string;
@@ -96,8 +105,15 @@ export default async function ShowPosts({ postTitle, pathName }: Props) {
     ref.forEach((doc) => {
       newData.push({ name: doc.id, data: doc.data() });
     });
+
     data = newData;
+    console.log('1', data);
   }
+
+  console.log(
+    '22',
+    moment(data[0]?.data?.timestamp.toDate()).format('HH:mm:ss'),
+  );
 
   return (
     <div className="flex flex-col">
@@ -106,16 +122,26 @@ export default async function ShowPosts({ postTitle, pathName }: Props) {
         <div className="basis-[80%]">
           <ul className="pl-4">
             {data &&
-              data.map((item: any, idx: number) => {
-                return (
-                  <Link href={`/blog/${item.name}`} key={idx}>
-                    <li className="m-4 border-b pb-4">
-                      <span className="pr-4">{idx + 1}</span>
-                      <span>{item.data.title}</span>
-                    </li>
-                  </Link>
-                );
-              })}
+              data
+                .sort(
+                  (a: any, b: any) =>
+                    b.data.timestamp.seconds - a.data.timestamp.seconds,
+                )
+                .map((item: any, idx: number) => {
+                  const date = dateFormat(item);
+                  console.log(date);
+                  return (
+                    <Link href={`/blog/${item.name}`} key={idx}>
+                      <li className="m-4 border-b pb-4 flex justify-between">
+                        <div>
+                          <span className="pr-4">{idx + 1}</span>
+                          <span>{item.data.title}</span>
+                        </div>
+                        <span className=" font-thin text-sm">{date}</span>
+                      </li>
+                    </Link>
+                  );
+                })}
           </ul>
         </div>
         <div className=" justify-end text-end">
