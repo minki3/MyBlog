@@ -1,16 +1,8 @@
 import React from 'react';
-import {
-  collection,
-  query,
-  where,
-  getDocs,
-  doc,
-  getDoc,
-} from 'firebase/firestore';
-import { cloudDb, auth } from '../../../../firebase';
+import { doc, getDoc } from 'firebase/firestore';
+import { cloudDb } from '../../../../firebase';
 import parse from 'html-react-parser';
 import UpdateButton from '@/app/components/UpdateButton';
-import { redirect } from 'next/navigation';
 
 interface Props {
   params: {
@@ -24,12 +16,8 @@ export default async function PostSlugPage({ params }: Props) {
   if (query.exists()) {
     data = { name: query.id, data: query.data() };
   }
-  // query.forEach((doc) => {
-  //   if (querySnapshot) return (data = { name: doc.id, data: doc.data() });
-  // });
 
   if (data === undefined) return <div>페이지를 찾을 수 없음</div>;
-
   return (
     <div className="flex flex-col p-4">
       <UpdateButton uid={data.data.uid} post={data.name} />

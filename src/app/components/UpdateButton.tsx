@@ -1,8 +1,9 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useEffect } from 'react';
 import { auth } from '../../../firebase';
 import { useRouter } from 'next/navigation';
+import { CreateAuthContext } from '@/app/context/AuthContext';
 
 interface Props {
   uid: string;
@@ -10,15 +11,10 @@ interface Props {
 }
 
 export default function UpdateButton({ uid, post }: Props) {
-  const [userInformation, setUserInformation] = useState<any>();
+  // const [userInformation, setUserInformation] = useState<any>();
+  const { userInformation } = useContext(CreateAuthContext);
 
   const router = useRouter();
-
-  useEffect(() => {
-    auth.onAuthStateChanged((user) => {
-      if (user) return setUserInformation(user);
-    });
-  }, []);
 
   const currentUid = userInformation?.uid;
 

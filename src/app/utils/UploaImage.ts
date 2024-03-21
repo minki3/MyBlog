@@ -23,7 +23,6 @@ export class CustomUploadAdapter {
             console.log('Upload successful');
             getDownloadURL(imageStorageRef)
               .then((url) => {
-                console.log(url);
                 resolve({ default: url });
               })
               .catch((error) => reject(error));
