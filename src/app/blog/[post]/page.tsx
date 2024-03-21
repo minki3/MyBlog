@@ -3,6 +3,7 @@ import { doc, getDoc } from 'firebase/firestore';
 import { cloudDb } from '../../../../firebase';
 import parse from 'html-react-parser';
 import UpdateButton from '@/app/components/UpdateButton';
+import DeleteButton from '@/app/components/DeleteButton';
 
 interface Props {
   params: {
@@ -21,6 +22,7 @@ export default async function PostSlugPage({ params }: Props) {
   return (
     <div className="flex flex-col p-4">
       <UpdateButton uid={data.data.uid} post={data.name} />
+      <DeleteButton uid={data.data.uid} post={data.name} />
       <span className="font-blod text-2xl pb-4 border-b-2 mb-8 pl-2 border-black">
         {data.data.title}
       </span>
