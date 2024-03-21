@@ -4,6 +4,7 @@ import './globals.css';
 import NavigationBar from '@/app/components/nav/NavigationBar';
 import Footer from '@/app/components/nav/Footer';
 import Category from '@/app/components/category/Category';
+import { AuthContext } from '@/app/context/AuthContext';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -20,12 +21,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <NavigationBar />
-        <main className="p-2">
-          <Category />
-          <div className="basis-[90%]">{children}</div>
-        </main>
-        <Footer />
+        <AuthContext>
+          <NavigationBar />
+          <main className="p-2">
+            <Category />
+            <div className="basis-[90%]">{children}</div>
+          </main>
+          <Footer />
+        </AuthContext>
       </body>
     </html>
   );

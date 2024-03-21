@@ -21,7 +21,6 @@ const Login = () => {
       );
 
       await updateProfile(result.user, { displayName: information.nickname });
-      console.log('1111', result.user);
 
       setDoc(doc(cloudDb, 'users', `${result.user.uid}`), {
         email: result.user.email,

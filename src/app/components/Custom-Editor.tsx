@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { CreateAuthContext } from '@/app/context/AuthContext';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { cloudDb } from '../../../firebase';
@@ -23,10 +24,10 @@ export const CATEGORY = [
 
 function CustomEditor() {
   const params = useSearchParams();
+  const { userInformation } = useContext(CreateAuthContext);
 
   const post = params.get('post');
 
-  const [userInformation, setUserInformation] = useState<any>();
   const [headers, setHeaders] = useState({
     title: '',
     subTitle: '',
@@ -57,6 +58,8 @@ function CustomEditor() {
       })
         .then((res) => {
           console.log('성공');
+          router.push(`/blog/${post}`);
+          router.refresh();
         })
         .catch((e) => {
           console.log(e);
@@ -72,7 +75,8 @@ function CustomEditor() {
         timestamp: serverTimestamp(),
       })
         .then((res) => {
-          console.log('성공');
+          router.push(`/blog/all`);
+          router.refresh();
         })
         .catch((e) => {
           console.log(e);
@@ -80,27 +84,12 @@ function CustomEditor() {
     }
   };
 
-  useEffect(() => {
-    auth.onAuthStateChanged((user) => {
-      if (user) {
-        setUserInformation(user);
-      } else {
-        alert('로그인 후 이용');
-        router.push('/');
-      }
-    });
-  }, []);
-
   //문서 수정 코드
   useEffect(() => {
     const getData = async () => {
       const q = doc(cloudDb, 'posts/', `${post}`);
       const query = await getDoc(q);
-      console.log(post);
-      console.log(query.id);
       if (query.exists()) {
-        console.log('Document data:', query.data());
-        console.log(query.id);
         setHeaders({
           title: query.data().title,
           subTitle: query.data().subTitle,
@@ -108,11 +97,19 @@ function CustomEditor() {
         });
         setContent(query.data().contents);
       } else {
-        if (post !== null) router.push('/');
+        if (post !== null) {
+          alert('글이 존재하지 않습니다.');
+          router.push('/');
+        }
       }
     };
     getData();
   }, [post]);
+
+  if (userInformation === null) {
+    alert('로그인 후 이용');
+    router.push('/');
+  }
 
   return (
     <>

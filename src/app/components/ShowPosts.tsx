@@ -75,7 +75,6 @@ import Link from 'next/link';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { cloudDb } from '../../../firebase';
 import WriteButton from '@/app/components/WriteButton';
-import moment from 'moment';
 import { dateFormat } from '@/app/utils/dateFormat';
 interface Props {
   postTitle: string;
@@ -107,13 +106,7 @@ export default async function ShowPosts({ postTitle, pathName }: Props) {
     });
 
     data = newData;
-    console.log('1', data);
   }
-
-  console.log(
-    '22',
-    moment(data[0]?.data?.timestamp.toDate()).format('HH:mm:ss'),
-  );
 
   return (
     <div className="flex flex-col">
@@ -129,7 +122,7 @@ export default async function ShowPosts({ postTitle, pathName }: Props) {
                 )
                 .map((item: any, idx: number) => {
                   const date = dateFormat(item);
-                  console.log(date);
+
                   return (
                     <Link href={`/blog/${item.name}`} key={idx}>
                       <li className="m-4 border-b pb-4 flex justify-between">
