@@ -12,7 +12,6 @@ import {
   doc,
   updateDoc,
 } from 'firebase/firestore';
-import { auth } from '../../../firebase';
 import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
 
@@ -34,7 +33,6 @@ function CustomEditor() {
   });
   const [content, setContent] = useState<string>();
   const router = useRouter();
-  console.log(content);
   const handleInput = (e: any) => {
     const { name, value } = e.target;
     setHeaders({ ...headers, [name]: value });
@@ -103,10 +101,12 @@ function CustomEditor() {
     getData();
   }, [post]);
 
-  if (userInformation === null) {
-    alert('로그인 후 이용');
-    router.push('/');
-  }
+  useEffect(() => {
+    if (!userInformation) {
+      alert('로그인 후 이용');
+      router.push('/');
+    }
+  }, [userInformation]);
 
   return (
     <div className="flex flex-col">
