@@ -137,38 +137,38 @@ function CustomEditor() {
           onChange={handleInput}
         />
       </div>
-
-      <CKEditor
-        editor={ClassicEditor}
-        // className="h-[500px]"
-        config={{
-          extraPlugins: [uploadPlugin],
-          toolbar: [
-            'heading',
-            '|',
-            'bold',
-            'italic',
-            'link',
-            'bulletedList',
-            'numberedList',
-            '|',
-            'outdent',
-            'indent',
-            '|',
-            'imageUpload',
-            'blockQuote',
-            'insertTable',
-            'mediaEmbed',
-            'undo',
-            'redo',
-          ],
-        }}
-        data={content}
-        onChange={(_, editor) => {
-          const data = editor.getData();
-          setContent(data);
-        }}
-      />
+      <div className="prose" style={{ all: 'unset' }}>
+        <CKEditor
+          editor={ClassicEditor}
+          config={{
+            extraPlugins: [uploadPlugin],
+            toolbar: [
+              'heading',
+              '|',
+              'bold',
+              'italic',
+              'link',
+              'bulletedList',
+              'numberedList',
+              '|',
+              'outdent',
+              'indent',
+              '|',
+              'imageUpload',
+              'blockQuote',
+              'insertTable',
+              'mediaEmbed',
+              'undo',
+              'redo',
+            ],
+          }}
+          data={content}
+          onChange={(_, editor) => {
+            const data = editor.getData();
+            setContent(data);
+          }}
+        />
+      </div>
       <div className="flex justify-center gap-4">
         <button
           className="border p-2 mt-4 rounded-lg"
