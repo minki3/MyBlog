@@ -16,8 +16,9 @@ export default function DeleteButton({ uid, post }: Props) {
 
   return (
     <button
+      className="hover:font-bold"
       onClick={async () => {
-        if (userInformation.uid === uid) {
+        if (userInformation?.uid === uid) {
           await deleteDoc(doc(cloudDb, 'posts', `${post}`));
           router.push(`/blog/all`);
           router.refresh();

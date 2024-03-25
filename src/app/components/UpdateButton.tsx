@@ -20,6 +20,7 @@ export default function UpdateButton({ uid, post }: Props) {
 
   return (
     <button
+      className="hover:font-bold"
       onClick={() => {
         if (currentUid === uid) {
           router.push(`/write?post=${post}`);

@@ -12,7 +12,6 @@ import {
   doc,
   updateDoc,
 } from 'firebase/firestore';
-import { auth } from '../../../firebase';
 import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
 
@@ -30,12 +29,10 @@ function CustomEditor() {
 
   const [headers, setHeaders] = useState({
     title: '',
-    subTitle: '',
     category: '',
   });
   const [content, setContent] = useState<string>();
   const router = useRouter();
-
   const handleInput = (e: any) => {
     const { name, value } = e.target;
     setHeaders({ ...headers, [name]: value });
@@ -47,12 +44,12 @@ function CustomEditor() {
 
   const uploadHandler = async () => {
     if (headers.category === '') return alert('카테고리를 선택해주세요.');
+    if (headers.title === '') return alert('제목을 입력 해주세요.');
 
     if (post) {
       const updatePost = doc(cloudDb, 'posts', `${post}`);
       await updateDoc(updatePost, {
         title: headers.title,
-        subTitle: headers.subTitle,
         contents: content,
         category: headers.category,
       })
@@ -67,7 +64,6 @@ function CustomEditor() {
     } else {
       addDoc(collection(cloudDb, `posts`), {
         title: headers.title,
-        subTitle: headers.subTitle,
         contents: content,
         category: headers.category,
         auth: userInformation.displayName,
@@ -92,7 +88,6 @@ function CustomEditor() {
       if (query.exists()) {
         setHeaders({
           title: query.data().title,
-          subTitle: query.data().subTitle,
           category: query.data().category,
         });
         setContent(query.data().contents);
@@ -106,75 +101,88 @@ function CustomEditor() {
     getData();
   }, [post]);
 
-  if (userInformation === null) {
-    alert('로그인 후 이용');
-    router.push('/');
-  }
+  useEffect(() => {
+    if (!userInformation) {
+      alert('로그인 후 이용');
+      router.push('/');
+    }
+  }, [userInformation]);
 
   return (
-    <>
-      <input
-        type="text"
-        name="title"
-        placeholder="제목"
-        value={headers.title}
-        onChange={handleInput}
-      />
-      <input
-        type="text"
-        name="subTitle"
-        placeholder="부제목"
-        value={headers.subTitle}
-        onChange={handleInput}
-      />
-      <select
-        value={headers.category}
-        onChange={(e) => {
-          handleCategory(e.target.value);
-        }}
-      >
-        {CATEGORY.map(
-          (item: { category: string; name: string }, idx: number) => {
-            return (
-              <option key={idx} value={item.name}>
-                {item.category}
-              </option>
-            );
-          },
-        )}
-      </select>
-      <CKEditor
-        editor={ClassicEditor}
-        config={{
-          extraPlugins: [uploadPlugin],
-          toolbar: [
-            'heading',
-            '|',
-            'bold',
-            'italic',
-            'link',
-            'bulletedList',
-            'numberedList',
-            '|',
-            'outdent',
-            'indent',
-            '|',
-            'imageUpload',
-            'blockQuote',
-            'insertTable',
-            'mediaEmbed',
-            'undo',
-            'redo',
-          ],
-        }}
-        data={content}
-        onChange={(_, editor) => {
-          const data = editor.getData();
-          setContent(data);
-        }}
-      />
-      <button onClick={uploadHandler}>업로드</button>
-    </>
+    <div className="flex flex-col">
+      <div className="mb-4">
+        <select
+          value={headers.category}
+          className=" border border-gray-400 rounded-lg p-2 mr-4"
+          onChange={(e) => {
+            handleCategory(e.target.value);
+          }}
+        >
+          {CATEGORY.map(
+            (item: { category: string; name: string }, idx: number) => {
+              return (
+                <option key={idx} value={item.name}>
+                  {item.category}
+                </option>
+              );
+            },
+          )}
+        </select>
+        <input
+          type="text"
+          name="title"
+          placeholder="제목"
+          className="w-[70%] border border-gray-400 rounded-lg p-2"
+          value={headers.title}
+          onChange={handleInput}
+        />
+      </div>
+      <div className="prose" style={{ all: 'unset' }}>
+        <CKEditor
+          editor={ClassicEditor}
+          config={{
+            extraPlugins: [uploadPlugin],
+            toolbar: [
+              'heading',
+              '|',
+              'bold',
+              'italic',
+              'link',
+              'bulletedList',
+              'numberedList',
+              '|',
+              'outdent',
+              'indent',
+              '|',
+              'imageUpload',
+              'blockQuote',
+              'insertTable',
+              'mediaEmbed',
+              'undo',
+              'redo',
+            ],
+          }}
+          data={content}
+          onChange={(_, editor) => {
+            const data = editor.getData();
+            setContent(data);
+          }}
+        />
+      </div>
+      <div className="flex justify-center gap-4">
+        <button
+          className="border p-2 mt-4 rounded-lg"
+          onClick={() => {
+            router.push('/blog/all');
+          }}
+        >
+          취소
+        </button>
+        <button onClick={uploadHandler} className="border p-2 mt-4 rounded-lg">
+          업로드
+        </button>
+      </div>
+    </div>
   );
 }
 
