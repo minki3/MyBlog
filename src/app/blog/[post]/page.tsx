@@ -12,6 +12,10 @@ import parse from 'html-react-parser';
 import UpdateButton from '@/app/components/UpdateButton';
 import DeleteButton from '@/app/components/DeleteButton';
 import { dateFormat } from '@/app/utils/dateFormat';
+import leftArrow from '@public/icon/leftArrow.png';
+import rightArrow from '@public/icon/rightArrow.png';
+import Link from 'next/link';
+import Image from 'next/image';
 
 interface Props {
   params: {
@@ -31,11 +35,27 @@ export default async function PostSlugPage({ params }: Props) {
     where('category', '==', data.data.category),
   );
 
-  // const postResult = await getDocs(getPosts);
-  // postResult.forEach((doc) => {
-  //   // doc.data() is never undefined for query doc snapshots
-  //   console.log(doc.id, ' => ', doc.data());
-  // });
+  const postResult = await getDocs(getPosts);
+  let posts: any = [];
+  postResult.forEach((doc) => {
+    // doc.data() is never undefined for query doc snapshots
+    posts.push({ id: doc.id, data: doc.data() });
+  });
+
+  const currentPost: number = posts
+    .sort(
+      (a: any, b: any) => b.data.timestamp.seconds - a.data.timestamp.seconds,
+    )
+    .findIndex((item: any) => item.id === params.post);
+
+  // const prevPost = () => {
+  //   if (currentPost === 0) {
+  //     return;
+  //   } else {
+  //     currentPost - 1;
+  //   }
+  // };
+  // const nextPost = currentPost + 1;
 
   const date = dateFormat(data);
   if (data === undefined) return <div>페이지를 찾을 수 없음</div>;
@@ -63,6 +83,22 @@ export default async function PostSlugPage({ params }: Props) {
         <div className="mt-4 pl-2 border-b-2 border-black">
           {parse(data.data.contents)}
         </div>
+      </div>
+      <div className="flex justify-between mt-4">
+        {currentPost === 0 ? (
+          <div></div>
+        ) : (
+          <Link href={`/blog/${posts[currentPost - 1]?.id}`}>
+            <Image src={leftArrow} alt="leftarrow" width={25} height={25} />
+          </Link>
+        )}
+        {currentPost === posts.length - 1 ? (
+          <div></div>
+        ) : (
+          <Link href={`/blog/${posts[currentPost + 1]?.id}`}>
+            <Image src={rightArrow} alt="rightarrow" width={25} height={25} />
+          </Link>
+        )}
       </div>
     </div>
   );
