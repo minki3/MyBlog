@@ -6,6 +6,7 @@ import {
   collection,
   where,
   getDocs,
+  orderBy,
 } from 'firebase/firestore';
 import { cloudDb } from '../../../../firebase';
 import parse from 'html-react-parser';
@@ -33,6 +34,7 @@ export default async function PostSlugPage({ params }: Props) {
   const getPosts = query(
     collection(cloudDb, 'posts'),
     where('category', '==', data.data.category),
+    orderBy('timestamp', 'desc'),
   );
 
   const postResult = await getDocs(getPosts);
@@ -42,27 +44,27 @@ export default async function PostSlugPage({ params }: Props) {
     posts.push({ id: doc.id, data: doc.data() });
   });
 
-  const currentPost: number = posts
-    .sort(
-      (a: any, b: any) => b.data.timestamp.seconds - a.data.timestamp.seconds,
-    )
-    .findIndex((item: any) => item.id === params.post);
+  console.log(posts);
 
-  // const prevPost = () => {
-  //   if (currentPost === 0) {
-  //     return;
-  //   } else {
-  //     currentPost - 1;
-  //   }
-  // };
-  // const nextPost = currentPost + 1;
+  const currentPost: number = posts.findIndex(
+    (item: any) => item.id === params.post,
+  );
 
   const date = dateFormat(data);
   if (data === undefined) return <div>페이지를 찾을 수 없음</div>;
   return (
     <div className="flex flex-col p-4">
-      <div className="border-black border-b-2 pl-2 pb-2">
+      <div className="flex justify-between items-center border-black border-b-2 px-2 pb-2">
         <span className="font-bold">{data.data.category}</span>
+        <Link href={`/blog/${data.data.category}`}>
+          <Image
+            src={leftArrow}
+            alt="arrow"
+            width={20}
+            height={20}
+            className=" hover:cursor-pointer"
+          />
+        </Link>
       </div>
       <div className=" py-4 border-b-2  px-2 border-black flex items-center justify-between">
         <span className="font-blod text-2xl">{data.data.title}</span>
@@ -89,14 +91,30 @@ export default async function PostSlugPage({ params }: Props) {
           <div></div>
         ) : (
           <Link href={`/blog/${posts[currentPost - 1]?.id}`}>
-            <Image src={leftArrow} alt="leftarrow" width={25} height={25} />
+            <div className="flex gap-2 border border-b-2 p-4">
+              <Image src={leftArrow} alt="leftarrow" width={30} height={30} />
+              <div className="flex flex-col">
+                <span className="font-bold text-[12px]">
+                  {posts[currentPost - 1]?.data.category}
+                </span>
+                <span>{posts[currentPost - 1]?.data.title}</span>
+              </div>
+            </div>
           </Link>
         )}
         {currentPost === posts.length - 1 ? (
           <div></div>
         ) : (
           <Link href={`/blog/${posts[currentPost + 1]?.id}`}>
-            <Image src={rightArrow} alt="rightarrow" width={25} height={25} />
+            <div className="flex gap-2 border border-b-2 p-6">
+              <div className="flex flex-col">
+                <span className="font-bold text-[12px]">
+                  {posts[currentPost + 1]?.data.category}
+                </span>
+                <span>{posts[currentPost + 1]?.data.title}</span>
+              </div>
+              <Image src={rightArrow} alt="rightarrow" width={30} height={30} />
+            </div>
           </Link>
         )}
       </div>

@@ -72,7 +72,7 @@
 //ssr
 import React from 'react';
 import Link from 'next/link';
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { collection, getDocs, query, where, orderBy } from 'firebase/firestore';
 import { cloudDb } from '../../../firebase';
 import WriteButton from '@/app/components/WriteButton';
 import { dateFormat } from '@/app/utils/dateFormat';
@@ -85,7 +85,9 @@ export default async function ShowPosts({ postTitle, pathName }: Props) {
   let data;
 
   if (pathName === 'all') {
-    const ref = await getDocs(collection(cloudDb, 'posts'));
+    const q = query(collection(cloudDb, 'posts'), orderBy('timestamp', 'desc'));
+
+    const ref = await getDocs(q);
     const newData: any = [];
     ref.forEach((doc) => {
       newData.push({ name: doc.id, data: doc.data() });
@@ -95,6 +97,7 @@ export default async function ShowPosts({ postTitle, pathName }: Props) {
     const q = query(
       collection(cloudDb, 'posts'),
       where('category', '==', `${pathName}`),
+      orderBy('timestamp', 'desc'),
     );
 
     const ref = await getDocs(q);
@@ -115,26 +118,21 @@ export default async function ShowPosts({ postTitle, pathName }: Props) {
         <div className="basis-[80%]">
           <ul className="pl-4">
             {data &&
-              data
-                .sort(
-                  (a: any, b: any) =>
-                    b.data.timestamp.seconds - a.data.timestamp.seconds,
-                )
-                .map((item: any, idx: number) => {
-                  const date = dateFormat(item);
+              data.map((item: any, idx: number) => {
+                const date = dateFormat(item);
 
-                  return (
-                    <Link href={`/blog/${item.name}`} key={idx}>
-                      <li className="m-4 border-b pb-4 flex justify-between">
-                        <div>
-                          <span className="pr-4">{idx + 1}</span>
-                          <span>{item.data.title}</span>
-                        </div>
-                        <span className=" font-thin text-sm">{date}</span>
-                      </li>
-                    </Link>
-                  );
-                })}
+                return (
+                  <Link href={`/blog/${item.name}`} key={idx}>
+                    <li className="m-4 border-b pb-4 flex justify-between">
+                      <div>
+                        <span className="pr-4">{idx + 1}</span>
+                        <span>{item.data.title}</span>
+                      </div>
+                      <span className=" font-thin text-sm">{date}</span>
+                    </li>
+                  </Link>
+                );
+              })}
           </ul>
         </div>
         <div className=" justify-end text-end">
