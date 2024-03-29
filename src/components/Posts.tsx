@@ -1,6 +1,6 @@
 // 'use client';
 import React from 'react';
-import { db } from '../../../firebase';
+import { db } from '../../firebase';
 import { ref, onValue } from 'firebase/database';
 import parse from 'html-react-parser';
 

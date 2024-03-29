@@ -1,5 +1,5 @@
 import React from 'react';
-import ShowPosts from '@/app/components/ShowPosts';
+import ShowPosts from '@/components/ShowPosts';
 
 export default function Hobby() {
   return (

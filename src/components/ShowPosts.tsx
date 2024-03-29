@@ -73,9 +73,9 @@
 import React from 'react';
 import Link from 'next/link';
 import { collection, getDocs, query, where, orderBy } from 'firebase/firestore';
-import { cloudDb } from '../../../firebase';
-import WriteButton from '@/app/components/WriteButton';
-import { dateFormat } from '@/app/utils/dateFormat';
+import { cloudDb } from '../../firebase';
+import WriteButton from '@/components/WriteButton';
+import { dateFormat } from '@/utils/dateFormat';
 interface Props {
   postTitle: string;
   pathName: string;

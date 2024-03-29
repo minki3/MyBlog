@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { CreateAuthContext } from '@/app/context/AuthContext';
+import { CreateAuthContext } from '@/context/AuthContext';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import { cloudDb } from '../../../firebase';
-import { uploadPlugin } from '@/app/utils/UploaImage';
+import { cloudDb } from '../../firebase';
+import { uploadPlugin } from '@/utils/UploaImage';
 import {
   addDoc,
   collection,
@@ -54,7 +54,7 @@ function CustomEditor() {
         category: headers.category,
       })
         .then((res) => {
-          console.log('성공');
+          alert('글이 등록되었습니다.');
           router.push(`/blog/${post}`);
           router.refresh();
         })
@@ -71,6 +71,7 @@ function CustomEditor() {
         timestamp: serverTimestamp(),
       })
         .then((res) => {
+          alert('글이 등록되었습니다.');
           router.push(`/blog/all`);
           router.refresh();
         })

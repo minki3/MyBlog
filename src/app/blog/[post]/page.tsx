@@ -10,9 +10,9 @@ import {
 } from 'firebase/firestore';
 import { cloudDb } from '../../../../firebase';
 import parse from 'html-react-parser';
-import UpdateButton from '@/app/components/UpdateButton';
-import DeleteButton from '@/app/components/DeleteButton';
-import { dateFormat } from '@/app/utils/dateFormat';
+import UpdateButton from '@/components/UpdateButton';
+import DeleteButton from '@/components/DeleteButton';
+import { dateFormat } from '@/utils/dateFormat';
 import leftArrow from '@public/icon/leftArrow.png';
 import rightArrow from '@public/icon/rightArrow.png';
 import Link from 'next/link';
