@@ -101,9 +101,9 @@ function CustomEditor() {
     };
     getData();
   }, [post]);
-
+  console.log(userInformation);
   useEffect(() => {
-    if (!userInformation) {
+    if (userInformation === undefined) {
       alert('로그인 후 이용');
       router.push('/');
     }
