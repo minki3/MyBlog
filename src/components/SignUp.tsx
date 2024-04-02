@@ -1,9 +1,9 @@
 'use client';
 import React, { useState } from 'react';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-import { auth, app } from '../../../firebase';
+import { auth, app } from '../../firebase';
 import { doc, setDoc } from 'firebase/firestore';
-import { cloudDb } from '../../../firebase';
+import { cloudDb } from '../../firebase';
 
 const Login = () => {
   const [information, setInformation] = useState({

@@ -1,7 +1,7 @@
-import Login from '@/app/components/Login';
-import Posts from '@/app/components/Posts';
-import SignUp from '@/app/components/SignUp';
-import Introduce from '@/app/components/introduce/Introduce';
+import Login from '@/components/Login';
+import Posts from '@/components/Posts';
+import SignUp from '@/components/SignUp';
+import Introduce from '@/components/introduce/Introduce';
 
 export default function Home() {
   return (

@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/navigation';
-import { CreateAuthContext } from '@/app/context/AuthContext';
+import { CreateAuthContext } from '@/context/AuthContext';
 
 export default function WriteButton() {
   const router = useRouter();

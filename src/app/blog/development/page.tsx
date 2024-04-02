@@ -1,4 +1,4 @@
-import ShowPosts from '@/app/components/ShowPosts';
+import ShowPosts from '@/components/ShowPosts';
 import React from 'react';
 
 export default function Development() {

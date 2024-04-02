@@ -73,9 +73,9 @@
 import React from 'react';
 import Link from 'next/link';
 import { collection, getDocs, query, where, orderBy } from 'firebase/firestore';
-import { cloudDb } from '../../../firebase';
-import WriteButton from '@/app/components/WriteButton';
-import { dateFormat } from '@/app/utils/dateFormat';
+import { cloudDb } from '../../firebase';
+import WriteButton from '@/components/WriteButton';
+import { dateFormat } from '@/utils/dateFormat';
 interface Props {
   postTitle: string;
   pathName: string;
@@ -122,13 +122,26 @@ export default async function ShowPosts({ postTitle, pathName }: Props) {
                 const date = dateFormat(item);
 
                 return (
-                  <Link href={`/blog/${item.name}`} key={idx}>
+                  <Link
+                    // as={`/blog/${item.data.title}`}
+                    href={{
+                      pathname: `/blog/${item.name}`,
+                      // query: {
+                      //   category: item.data.category,
+                      // },
+                    }}
+                    // href={`/blog/${item.name}?post=${item.name}&category=${item.data.category}`}
+                    key={idx}
+                  >
                     <li className="m-4 border-b pb-4 flex justify-between">
                       <div>
                         <span className="pr-4">{idx + 1}</span>
                         <span>{item.data.title}</span>
                       </div>
-                      <span className=" font-thin text-sm">{date}</span>
+                      <div className="flex font-thin text-sm gap-2">
+                        <span>{item.data.auth}</span>
+                        <span className="">{date}</span>
+                      </div>
                     </li>
                   </Link>
                 );

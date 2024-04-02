@@ -1,9 +1,9 @@
 'use client';
 import React, { useContext, useState } from 'react';
 import { useEffect } from 'react';
-import { auth } from '../../../firebase';
+import { auth } from '../../firebase';
 import { useRouter } from 'next/navigation';
-import { CreateAuthContext } from '@/app/context/AuthContext';
+import { CreateAuthContext } from '@/context/AuthContext';
 
 interface Props {
   uid: string;

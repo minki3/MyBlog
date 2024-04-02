@@ -1,8 +1,8 @@
-import ShowPosts from '@/app/components/ShowPosts';
+import ShowPosts from '@/components/ShowPosts';
 import React, { Suspense } from 'react';
 
 export default function AllPosts() {
-  const LazyShowPosts = React.lazy(() => import('@/app/components/ShowPosts'));
+  const LazyShowPosts = React.lazy(() => import('@/components/ShowPosts'));
 
   return (
     <div className="h-[100%]">
