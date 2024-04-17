@@ -26,7 +26,7 @@ function CustomEditor() {
   const { userInformation } = useContext(CreateAuthContext);
 
   const post = params.get('post');
-
+  console.log(post);
   const [headers, setHeaders] = useState({
     title: '',
     category: '',
@@ -53,7 +53,7 @@ function CustomEditor() {
         contents: content,
         category: headers.category,
       })
-        .then((res) => {
+        .then(() => {
           alert('글이 등록되었습니다.');
           router.push(`/blog/${post}`);
           router.refresh();
@@ -101,7 +101,7 @@ function CustomEditor() {
     };
     getData();
   }, [post]);
-  console.log(userInformation);
+
   useEffect(() => {
     if (userInformation === undefined) {
       alert('로그인 후 이용');

@@ -41,11 +41,10 @@ export default async function PostSlugPage({ params, searchParams }: Props) {
     where('category', '==', data.data.category),
     orderBy('timestamp', 'desc'),
   );
-
+  // console.log('1', data);
   const postResult = await getDocs(getPosts);
   let posts: any = [];
   postResult.forEach((doc) => {
-    // doc.data() is never undefined for query doc snapshots
     posts.push({ id: doc.id, data: doc.data() });
   });
 
@@ -54,8 +53,7 @@ export default async function PostSlugPage({ params, searchParams }: Props) {
   );
 
   const currentPost = await posts.find((item: any) => item.id === params.post);
-
-  // console.log(currentPost);
+  console.log('1', currentPost.id);
 
   const date = dateFormat(data);
   if (currentPost === undefined) return <div>페이지를 찾을 수 없음</div>;
@@ -81,10 +79,10 @@ export default async function PostSlugPage({ params, searchParams }: Props) {
         <span>작성자 : {currentPost.data.auth}</span>
         <div className="gap-2 flex">
           <div>
-            <UpdateButton uid={currentPost.data.uid} post={currentPost.name} />
+            <UpdateButton uid={currentPost.data.uid} post={currentPost.id} />
           </div>
           <div>
-            <DeleteButton uid={currentPost.data.uid} post={currentPost.name} />
+            <DeleteButton uid={currentPost.data.uid} post={currentPost.id} />
           </div>
         </div>
       </div>
