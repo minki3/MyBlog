@@ -28,7 +28,6 @@ interface Props {
   };
 }
 export default async function PostSlugPage({ params, searchParams }: Props) {
-  console.log('1', searchParams);
   const q = doc(cloudDb, `posts`, `${params.post}`);
   let data: any;
   const result = await getDoc(q);
